@@ -1,11 +1,21 @@
 import express from 'express';
+import cors from 'cors';
+import dotenv from 'dotenv';
+import weatherRouter from './routes/weather';
+
+dotenv.config();
+console.log('API Key length:', process.env.WEATHER_API_KEY?.length);
+
 const app = express();
-const port = 3000;
+app.use(cors());
+app.use(express.json());
 
-app.get('/', (req: any, res: any) => {
-    res.send('Hello World');
+app.use('/api/weather', weatherRouter);
+
+app.get('/api/ping', (req, res) => {
+  res.json({ message: 'Backend is working!' });
 });
 
-app.listen(port, () => {
-    console.log(`Server listening on port ${port}`);
-});
+const PORT = process.env.PORT || 3001;
+app.listen(PORT, () => console.log(`Backend running on port ${PORT}`));
+

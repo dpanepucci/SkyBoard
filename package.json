@@ -1,0 +1,12 @@
+{
+  "name": "skyboard-root",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "concurrently \"npm run dev --prefix server\" \"npm run dev --prefix Client\"",
+    "build": "npm run build --prefix server && npm run build --prefix Client"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

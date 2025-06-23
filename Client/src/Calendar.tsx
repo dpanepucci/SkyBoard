@@ -2,10 +2,13 @@ import { useState} from 'react';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
+import { v4 as uuidv4 } from 'uuid';
+
+import WeatherSearch from './components/Weather';
 
 const Calendar = () => {
   // User creates an event the chooses the date to add the event too
-  const [ events, setEvent ] = useState<{ title: string; date: string }[]>([]);
+  const [ events, setEvent ] = useState<{ id: string; title: string; date: string }[]>([]);
   const [sideBar, setSideBar] = useState(true); // SideBar useState for when date is clicked
   const [ selectedDate, setSelectedDate ] = useState(null);
   const [ userEventTitle, setUserEventTitle ] = useState('');
@@ -22,9 +25,17 @@ const Calendar = () => {
     if (userEventTitle && selectedDate) {
       setEvent([
         ...events,
-        { title: `${userEventTitle} at ${userEventTime}`, date: selectedDate },
+        { id: uuidv4(), title: `${userEventTitle} at ${userEventTime}`, date: selectedDate },
       ]);
     }};
+
+    const handleDeleteData =() => {
+      if (userEventTitle && selectedDate) {
+        setEvent(events.filter(
+          event =>  !(event.title === `${userEventTitle} at ${userEventTime}` && event.date === selectedDate)
+        ));
+      }
+    };
 
 
   return (
@@ -61,6 +72,10 @@ const Calendar = () => {
           <button onClick={handleAddEvent} style={{ marginRight: '10px' }}>
             Add Event
           </button>
+          <button onClick={handleDeleteData} style={{ marginRight: '10px'}}>
+            Delete Event
+          </button>
+          <WeatherSearch/>
         </div>
       )}
     </div>
